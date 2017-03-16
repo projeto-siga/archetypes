@@ -1,0 +1,137 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}</artifactId>
+  <version>1.2-SNAPSHOT</version>
+  <packaging>war</packaging>
+ 
+  <name>Projeto SIGA (padrão vraptor)</name>
+  <url>https://github.com/projeto-siga</url>
+ 
+ 	<build>
+		<plugins>
+			<!-- vraptor static scan -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.javassist</groupId>
+						<artifactId>javassist</artifactId>
+						<version>3.15.0-GA</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>static-scanning</id>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<echo message="Starting static scanning process..." />
+								<path id="build.classpath">
+									<fileset
+										dir="${project.build.directory}/${project.build.finalName}/WEB-INF/lib"
+										includes="*.jar" />
+									<fileset
+										dir="${project.build.directory}/../../lib/static_scan_vraptor/"
+										includes="*.jar" />
+
+								</path>
+								<java classpathref="build.classpath"
+									classname="br.com.caelum.vraptor.scan.VRaptorStaticScanning"
+									fork="true">
+									<arg
+										value="${project.build.directory}/${project.build.finalName}/WEB-INF/web.xml" />
+									<classpath refid="build.classpath" />
+									<classpath
+										path="${project.build.directory}/${project.build.finalName}/WEB-INF/classes" />
+								</java>
+								<war destfile="${project.build.directory}/${project.build.finalName}.war"
+									webxml="${project.build.directory}/${project.build.finalName}/WEB-INF/web.xml">
+									<fileset
+										dir="${project.build.directory}/${project.build.finalName}" />
+								</war>
+								<echo message="Static scanning process finished!" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+	<dependency>
+		<groupId>siga</groupId>
+		<artifactId>siga-vraptor-module</artifactId>
+	</dependency>
+
+<!-- templating -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>jsp-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jsptags</groupId>
+            <artifactId>pager-taglib</artifactId>
+        </dependency>
+        <!-- standard.jar -->
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <!-- JSTL -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+<!--/ templating -->
+
+<!-- persistencia -->
+        <dependency>
+            <groupId>br.com.caelum.vraptor</groupId>
+            <artifactId>vraptor-jpa</artifactId>
+            <version>1.0.2</version>
+            <exclusions>
+                <exclusion>  <!-- declare the exclusion here -->
+                    <groupId>org.eclipse.persistence</groupId>
+                    <artifactId>javax.persistence</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+<!--/ persistencia -->
+
+<!-- swagger -->	
+	<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-jaxrs</artifactId>
+			<version>1.5.10</version>
+	</dependency>
+
+	<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.4.5</version>
+	</dependency>
+<!--/ swagger -->		
+	
+  </dependencies>
+</project>
