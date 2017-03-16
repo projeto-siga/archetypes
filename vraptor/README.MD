@@ -21,5 +21,5 @@ c:\Trabalhos\Repositorios\siga\> mvn clean package
 3. Faça deploy (ou importe na IDE) e acesse:
 
 ```
-http://servidor/nome-projeto/app/principal
+http://servidor/novo-projeto/app/principal
 ```
