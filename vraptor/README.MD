@@ -20,8 +20,8 @@ c:\Trabalhos\Repositorios\siga\> mvn clean package
 
 3. Faça deploy (ou importe na IDE) e acesse:
 
-
+```
 página principal - http://servidor/novo-projeto/app/principal
 API - http://servidor/novo-projeto/api/v1/info
 Informações da API - http://servidor/novo-projeto/api/v1/swagger.json
-
+```
